@@ -1,0 +1,12 @@
+Package: Fletcher2013b
+Title: Master regulators of FGFR2 signalling and breast cancer risk.
+Version: 0.99.1
+Author: Mauro Castro, Michael Fletcher, Florian Markowetz and Kerstin Meyer.
+Description: This package reproduces the systems biology analysis for the package Fletcher2013a.
+Maintainer: Mauro Castro <mauro.a.castro@gmail.com>
+Depends: R (>= 2.15), Fletcher2013a, RTN, biomaRt,VennDiagram,RedeR (>=
+        1.8.1)
+Imports: RColorBrewer, corrgram
+License: GPL (>= 2)
+biocViews: ExperimentData, RNAExpressionData, Cancer
+InstallableEverywhere: yes

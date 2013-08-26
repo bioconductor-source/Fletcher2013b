@@ -1,0 +1,32 @@
+export(
+
+"Fletcher2013pipeline.mra1st",
+"Fletcher2013pipeline.mra2nd",
+"Fletcher2013pipeline.mraNormals",
+"Fletcher2013pipeline.mraTALL",
+
+"Fletcher2013pipeline.masters",
+"Fletcher2013pipeline.siRNA",
+"Fletcher2013pipeline.synergyShadow",
+"Fletcher2013pipeline.consensusnet",
+"Fletcher2013pipeline.enrichmap",
+"Fletcher2013pipeline.motifs",
+"Fletcher2013pipeline.chipseq",
+
+"Fletcher2013mra.agreement.cohort1",
+"Fletcher2013mra.agreement.exp1",
+"Fletcher2013mra.agreement.exp2",
+"Fletcher2013mra.agreement.exp3",
+"Fletcher2013mra.heatmap1",
+"Fletcher2013mra.heatmap2",
+"Fletcher2013mra.consensus",
+"Fletcher2013gsea.regulons"
+
+)
+importFrom(Fletcher2013a, Fletcher2013pipeline.deg)
+importFrom(biomaRt, listMarts, useMart, useDataset, getBM)
+importFrom(RedeR, addGraph, RedPort, calld, att.mapv, att.setv,att.sete, addLegend.color,addLegend.size,addLegend.shape,relax,resetd)
+importFrom(RTN,tna.mra,tna.overlap,tna.synergy,tna.shadow,tni2tna.preprocess,tna.get,tna.plot.gsea1)
+importFrom(RColorBrewer,brewer.pal)
+importFrom(VennDiagram,ell2poly)
+importFrom(corrgram,corrgram)

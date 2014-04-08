@@ -18,8 +18,8 @@ Fletcher2013pipeline.chipseq<-function(what="SPDEF"){
   chromlen<-get("chromlen")
   #get masters
   masters<-consensus$masters
-  bin<-rtni1st@results$tn.dpi[,masters[opts]]
-  bin[bin>0]=1
+  bin<-abs(rtni1st@results$tn.dpi[,masters[opts]])
+  bin[bin!=0]=1
   #get TSS map
   tssmap<-getTSSmap(rtniIDs$ENTREZ)
   if(what=="ESR1"){
@@ -75,8 +75,8 @@ Fletcher2013pipeline.motifs<-function(){
   fimoFOXA1<-get("fimoFOXA1")
   fimoGATA3<-get("fimoGATA3")
   masters<-consensus$masters
-  bin<-rtni1st@results$tn.dpi[,masters[c("ESR1","GATA3","FOXA1","SPDEF")]]
-  bin[bin>0]=1
+  bin<-abs(rtni1st@results$tn.dpi[,masters[c("ESR1","GATA3","FOXA1","SPDEF")]])
+  bin[bin!=0]=1
   #------------ ESR1 regulon
   reg<-bin[,masters["ESR1"]]
   reg<-names(reg[reg==1])

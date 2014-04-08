@@ -32,11 +32,11 @@ ymphoblastic leukaemia (Van Vlierberghe, P. et al.).
 }
 
 \source{
-Michael NC Fletcher, Mauro AA Castro, Suet-Feung Chin, Oscar Rueda, Xin Wang, Carlos Caldas, Bruce AJ Ponder, Florian Markowetz, Kerstin B Meyer. Master regulators of FGFR2 signalling and breast cancer risk. Journal paper (submitted). 2012.
+Michael NC Fletcher, Mauro AA Castro, Suet-Feung Chin, Oscar Rueda, Xin Wang, Carlos Caldas, Bruce AJ Ponder, Florian Markowetz, Kerstin B Meyer. Master regulators of FGFR2 signalling and breast cancer risk. Nature Communications, 4:2464, 2013.
 
-Curtis, C. et al. The genomic and transcriptomic architecture of 2,000 breast tumours reveals novel subgroups. Nature 486, 346-52 (2012).
+Curtis, C. et al. The genomic and transcriptomic architecture of 2,000 breast tumours reveals novel subgroups. Nature,  486:346-52, 2012.
 
-Van Vlierberghe, P. et al. ETV6 mutations in early immature human T cell leukemias. J Exp Med 208, 2571-9 (2011).
+Van Vlierberghe, P. et al. ETV6 mutations in early immature human T cell leukemias. J Exp Med, 208:2571-9, 2011.
 
 }
 

@@ -154,7 +154,7 @@ getmatch<-function(lts,glabs, set.seed.na=FALSE){
 #compute jaccard coefficient on tnets (among regulons)
 getJC<-function(tnet){
   bin<-tnet
-  bin[bin>0]=1
+  bin[bin!=0]=1
   jc<-function(x,xmat){
     c<-x+xmat
     a<-colSums(c==2)

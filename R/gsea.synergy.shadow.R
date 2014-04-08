@@ -36,7 +36,7 @@ plotSynergyShadow<-function(rtna){
   consensus<-get("consensus")
   masters<-consensus$masters
   #compute jaccard coefficient and clustering
-  jcmast<-rtni1st@results$tn.ref[,masters]
+  jcmast<-abs(rtni1st@results$tn.ref[,masters])
   masters[]<-rtni1st@annotation[masters,"ENTREZ"]
   colnames(jcmast)<-masters
   jcmast<-getJC(jcmast)

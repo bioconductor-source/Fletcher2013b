@@ -8,8 +8,8 @@ Fletcher2013mra.heatmap1<-function(){
   rtniIDs<-get("rtniIDs")
   #---compute jaccard coefficient
   minRegulonSize=20
-  tn.ref<-rtni1st@results$tn.ref
-  tn.ref<-tn.ref[,colSums(tn.ref>0)>=minRegulonSize]
+  tn.ref<-abs(rtni1st@results$tn.ref)
+  tn.ref<-tn.ref[,colSums(tn.ref!=0)>=minRegulonSize]
   jcmat<-getJC(tn.ref)
   #--- get signatures
   Exp1<-Fletcher2013pipeline.deg(what="Exp1")
@@ -142,7 +142,7 @@ Fletcher2013mra.heatmap2<-function(){
   consensusmasters<-consensus$consensusmasters
   minRegulonSize=20
   #compute jaccard coefficient
-  tn.ref<-rtni1st@results$tn.ref[,consensusmasters]
+  tn.ref<-abs(rtni1st@results$tn.ref[,consensusmasters])
   jcmast<-getJC(tn.ref)
   #get signatures
   Exp1<-Fletcher2013pipeline.deg(what="Exp1")

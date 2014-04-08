@@ -266,20 +266,6 @@ The meta-PCNA signature corresponds to a proliferation-based gene set (n=131 gen
 \end{small}
 
 
-\section{Package installation}
-
-Prior to installing the package \Rpackage{Fletcher2013b}, please download and install the source code for the R packages \Robject{Fletcher2013a} and \Rpackage{RTN} that accompany this study. Additionaly, the R packages \Rpackage{RedeR} (>= 1.4.1), \Rpackage{HTSanalyzeR}, \Rpackage{biomaRt}, \Rpackage{RColorBrewer}, \Rpackage{corrgram} and \Rpackage{VennDiagram} should be installed. These packages can be installed directly from Bioconductor and CRAN:
-
-\begin{small}
-<<install, eval=FALSE>>=
-  source("http://www.bioconductor.org/biocLite.R")
-  biocLite(c("biomaRt", "RedeR","HTSanalyzeR"))
-  install.packages(c("RColorBrewer","VennDiagram","corrgram"), 
-                   repos="http://cran.r-project.org")
-@ 
-\end{small}
-
-
 %----------------------------
 %----------------------------
 \clearpage

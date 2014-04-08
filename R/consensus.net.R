@@ -14,7 +14,7 @@ Fletcher2013pipeline.consensusnet<-function(){
   consensusmasters<-consensus$consensusmasters
   #--- get regulons
   rtni<-tni.dpi.filter(rtni1st, eps=0.01)
-  adjmt<-getmat(consensusmasters,rtni@results$tn.dpi)
+  adjmt<-getmat(consensusmasters,abs(rtni@results$tn.dpi))
   #--- get signatures
   X1<- Fletcher2013pipeline.deg(what="Exp1")
   X2<- Fletcher2013pipeline.deg(what="Exp2")

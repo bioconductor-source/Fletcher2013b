@@ -50,11 +50,11 @@ ChIP-seq datasets are represetative of 3 independent experiments, with peaks ove
 
 \source{
 
-Michael NC Fletcher, Mauro AA Castro, Suet-Feung Chin, Oscar Rueda, Xin Wang, Carlos Caldas, Bruce AJ Ponder, Florian Markowetz, Kerstin B Meyer. Master regulators of FGFR2 signalling and breast cancer risk. Journal paper (submitted). 2012.
+Michael NC Fletcher, Mauro AA Castro, Suet-Feung Chin, Oscar Rueda, Xin Wang, Carlos Caldas, Bruce AJ Ponder, Florian Markowetz, Kerstin B Meyer. Master regulators of FGFR2 signalling and breast cancer risk. Nature Communications, 4:2464, 2013.
 
-Grant CE, Bailey TL, Noble WS: FIMO: scanning for occurrences of a given motif. Bioinformatics 2011, 27(7):1017-1018.
+Grant CE, Bailey TL, Noble WS: FIMO: scanning for occurrences of a given motif. Bioinformatics, 27(7):1017-1018, 2011.
 
-Venet, D., Dumont, J.E. & Detours, V. Most random gene expression signatures are significantly associated with breast cancer outcome. PLoS Comput Biol 7, e1002240 (2011).
+Venet, D., Dumont, J.E. & Detours, V. Most random gene expression signatures are significantly associated with breast cancer outcome. PLoS Comput Biol, 7:e1002240, 2011.
 }
 
 \examples{

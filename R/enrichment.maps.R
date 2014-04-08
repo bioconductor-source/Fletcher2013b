@@ -31,8 +31,8 @@ Fletcher2013pipeline.enrichmap<-function(){
   #------------
   #compute jaccard coefficient (filter JC < 0.4)
   #obs1. full-overlap is shown in heatmap figures!
-  tn.ref<-rtni1st@results$tn.ref
-  tn.ref<-tn.ref[,colSums(tn.ref>0)>=20]
+  tn.ref<-abs(rtni1st@results$tn.ref)
+  tn.ref<-tn.ref[,colSums(tn.ref!=0)>=20]
   adjmt<-getJC(tn.ref)
   adjmt[adjmt<0.40]=0
   #get regulon's degree

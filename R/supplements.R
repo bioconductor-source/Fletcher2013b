@@ -1,155 +1,7 @@
 ##################################################################################
 ### Supplementary functions only used to generate  main figs. for Fletcher et al.
 ##################################################################################
-#function to plot aggrement among signatures
-plotcon<-function(L1,tlt="MRA agreement (Cohort I)",
-                  sig=1e-3, top=NULL, glabs=NULL, cols=NULL, vennsz=0.8,
-                  cexplab=0.75, cexpaxis=1.0, cexp=0.3, cexdiag=1.35, cexvenn1=1.0,
-                  cexvenn2=0.7, cex.axis=1.0, labp="Regulons (enrichment rank)",
-                  lfaxispos=1,btaxispos=1,lwd=1.0, tcl=-0.5){
-  llabs<-names(L1)
-  rlabs<-rownames(L1)
-  if(is.null(glabs))glabs<-names(L1)
-  ngroups=ncol(L1)
-  if(is.null(cols)){
-    cols<-rainbow(ngroups, alpha = 1)
-  }
-  maxg<-0
-  for(i in 1:ncol(L1)){
-    pt<-sum(!is.na(L1[,i]))
-    if(pt> maxg)maxg=pt
-  }
-  narmv<-function(x,y,labs){
-    na.map<-is.na(x)+is.na(y)
-    idx<-na.map==0
-    xy<-cbind(x[idx],y[idx])
-    rownames(xy)<-labs[idx]
-    colnames(xy)<-c("x","y")
-    xy  	
-  }
-  getRanks<-function(x,y,labs){
-    xy<-narmv(x,y,labs)
-    xy[,1]<-rank(xy[,1], na.last=NA )
-    xy[,2]<-rank(xy[,2], na.last=NA )		
-    xy
-  }
-  vc<-matrix(NA, nrow=(ngroups*(ngroups-1))/2, ncol=2)
-  n=1
-  for(i in 1:ngroups){
-    for(j in 1:ngroups){
-      if(i<j){
-        vc[n,]<-c(i,j)
-        n=n+1				
-      }
-    }
-  }
-  btaxispos=n-btaxispos
-  sizes<-list()
-  bgsz=0
-  for(i in 1:nrow(vc)){
-    if(is.null(top)){
-      x=L1[,vc[i,1]]
-      y=L1[,vc[i,2]]
-      xy=narmv(x,y, rlabs)
-      px=p.adjust(xy[,1])<sig
-      py=p.adjust(xy[,2])<sig			
-    } else {
-      x=L1[,vc[i,1]]
-      y=L1[,vc[i,2]]
-      xy=getRanks(x,y, rlabs)
-      px=xy[,1]<=top
-      py=xy[,2]<=top			
-    }
-    labs<-rownames(xy)	
-    szi<-length(intersect(labs[px],labs[py]))
-    szu<-length(union(labs[px],labs[py]))
-    sza<-sum(px)
-    szb<-sum(py)
-    if(sza>bgsz)bgsz=sza
-    if(szb>bgsz)bgsz=szb
-    invert=ifelse(sza>=szb,1,2)	
-    sizes[[i]]<-c(sza, szb, szi,szu)
-  }
-  j=1
-  panel.venn<-function(x, y,...){		
-    sz<-sizes[[j]]
-    relsz=(sz[1:2]/bgsz)/10
-    invert=ifelse(sz[1]>=sz[2],1,2)
-    pp<-draw2venn(sz[1], sz[2], sz[3], inverted=c(FALSE,TRUE)[invert], max.circle.size=sqrt(max(relsz))*vennsz)
-    xlim <- ylim <- c(0, 4)
-    plot.window(xlim, ylim)
-    ord=c(1:2)
-    posx=c(0.4,3.6)
-    if(invert==2)ord=rev(ord)
-    for(i in ord){
-      xx=pp[[i]]$x*4
-      yy=pp[[i]]$y*4
-      cc=adjustcolor(cols,alpha.f=0.5)
-      polygon(x=xx,y=yy,col=cc[vc[j,i]],lty="dotted")
-      text(x=posx[i],y=3.2,paste("n=", sz[i],sep=""),cex=cexvenn1)
-    }
-    jc=round(sz[3]/sz[4],2)
-    mtext(side=1,paste("JC=",jc,sep=""), line=-1.5, cex=cexvenn2)
-    xy=getRanks(x,y,rlabs)
-    r <-cor.test(xy[,1],xy[,2], method="spearman", exact=FALSE)
-    mtext(side=1,paste("R=",round(r$estimate,2),sep=""), line=-0.5, cex=cexvenn2)
-    #pp<-format(r$p.value, scientific=TRUE, digits=2)
-    #mtext(side=1,paste("P=",pp,sep=""), line=0.5, cex=0.6)			
-    assign("j",value=get("j")+1, inherits=TRUE)
-  }
-  k=1
-  panel.points<-function(x, y,...){
-    xy=getRanks(x,y,rlabs)
-    x=xy[,1]
-    y=xy[,2]
-    xlim <- c(0, maxg)
-    ylim <- c(0, maxg)
-    plot.window(xlim, ylim)
-    points(x,y, pch=15, cex=cexp,lwd=0.5)
-    #smoothScatter(x,y, bandwidth=12, add=TRUE)
-    box(col = "lightgray")
-    if(k%in%btaxispos){
-      axis(1, cex.axis=cex.axis, lwd=lwd, tcl=tcl)
-      mtext(labp,side=1,col="black",line=2.5,cex=cexplab)
-    }
-    if(k%in%lfaxispos){
-      axis(2,cex.axis=cex.axis,lwd=lwd, tcl=tcl)
-      mtext(labp,side=2,col="black",line=2.5,cex=cexplab)
-    }
-    assign("k",value=get("k")+1, inherits=TRUE)			
-  }
-  l=1
-  textpanel<-function(...){
-    plot.window(c(0,1), c(0,1))
-    text(x=0.5,y=0.5,glabs[l],cex=cexdiag,col=cols[l])
-    assign("l",value=get("l")+1, inherits=TRUE)
-  }
-  corrgram(L1, row1attop=TRUE, main=tlt, 
-           gap=0, labels=glabs, lower.panel=panel.points, 
-           upper.panel=panel.venn, text.panel=textpanel)
-}
-##-----------------------------------------------------------------------------
-#simple function to cross labels in aggrement plots
-#regulons in the agreement matrix are ether assigned to random values or NA, 
-#and then updated with the observed values in each experiment.
-getmatch<-function(lts,glabs, set.seed.na=FALSE){
-  labs=rownames(lts[[1]])
-  nc=length(lts)
-  nr=length(labs)
-  if(set.seed.na){
-    ssd<-NA
-  } else {
-    ssd<-runif(nr*nc,0,1)
-  }
-  pmat<-matrix(ssd,ncol=nc,nrow=nr,dimnames=list(labs,glabs))
-  pmat<-as.data.frame(pmat)
-  for(i in 1:length(lts)){
-    l1<-lts[[i]][labs,"Pvalue"]
-    idx<-!is.na(l1)
-    pmat[idx,glabs[i]]<-l1[idx]
-  }
-  return(pmat)
-}
+
 ##-----------------------------------------------------------------------------
 #compute jaccard coefficient on tnets (among regulons)
 getJC<-function(tnet){
@@ -393,33 +245,34 @@ plotovsysh<-function(ovmat,symat,shmat,xlab,leg1,leg2,fname="synergy.shadow"){
   dev.off()
   cat(paste("File '", fname,"' generated!\n\n", sep=""))
 }
+
 ##-----------------------------------------------------------------------------
 ##plot MRA summary as heatmap
-plot.summary.mra<-function(tb){
-  #---plot as table
-  img<-t(tb[rev(1:nrow(tb)),])
-  pdf(file="consensus.masters.pdf",height=4.2,width=3)
-  layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE), heights=c(8,2))
-  par(mar = c(0, 5, 6, 2), mgp=c(3,0.3,0))
-  cols<-colorRampPalette(colors=brewer.pal(6,"Blues"))(100)[c(1,25,62,85)]
-  image(img,col=cols,axes=FALSE)
-  axis(2, at=seq(0,1,length.out=ncol(img)), labels=colnames(img), las=2,
-       cex.axis=0.7,lwd=0.5,tcl=-0.2,hadj=1,mgp=c(3,0.5,0))
-  axis(3, at=seq(0,1,length.out=nrow(img)), labels=rep(c("Exp1","Exp2","Exp3"),4), las=2,
-       cex.axis=0.7,lwd=0.5,tcl=-0.2,hadj=0,mgp=c(3,0.5,0)) 
-  box(lwd=0.5)
-  mtext("Master regulators",side=2,adj=0.5,line=3.5,cex=0.7)
-  mtext(text=c("","Cohort I","","","Cohort II","","","Normals","","","T-ALL",""), 
-        at=seq(0,1,length.out=nrow(img)), side=3, cex=0.7, line=2.5)
-  #---plot legends
-  par(mar = c(2.5, 13.2, 1.7, 2),mgp=c(3,0.3,0))
-  xlab<-c("0.00","0.01","0.05")
-  image(matrix(1:length(xlab)), col=rev(cols)[1:3], axes=FALSE)
-  sq<-as.logical(1:length(xlab))
-  axis(1, at=seq(0, 1, length.out=length(xlab))[sq], 
-       labels=xlab[sq], las=2,cex.axis=0.6,tcl=-0.2,lwd=0.5)
-  box(lwd=0.5,col="grey50")
-  mtext("DPI cutoff",adj=0,line=0.1,cex=0.6) 
-  dev.off()
-  cat("-File 'consensus.masters.pdf' generated!\n\n")
-}
+# plot.summary.mra<-function(tb){
+#   #---plot as table
+#   img<-t(tb[rev(1:nrow(tb)),])
+#   pdf(file="consensus.masters.pdf",height=4.2,width=3)
+#   layout(matrix(c(1,1,2,2), 2, 2, byrow = TRUE), heights=c(8,2))
+#   par(mar = c(0, 5, 6, 2), mgp=c(3,0.3,0))
+#   cols<-colorRampPalette(colors=brewer.pal(6,"Blues"))(100)[c(1,25,62,85)]
+#   image(img,col=cols,axes=FALSE)
+#   axis(2, at=seq(0,1,length.out=ncol(img)), labels=colnames(img), las=2,
+#        cex.axis=0.7,lwd=0.5,tcl=-0.2,hadj=1,mgp=c(3,0.5,0))
+#   axis(3, at=seq(0,1,length.out=nrow(img)), labels=rep(c("Exp1","Exp2","Exp3"),4), las=2,
+#        cex.axis=0.7,lwd=0.5,tcl=-0.2,hadj=0,mgp=c(3,0.5,0)) 
+#   box(lwd=0.5)
+#   mtext("Master regulators",side=2,adj=0.5,line=3.5,cex=0.7)
+#   mtext(text=c("","Cohort I","","","Cohort II","","","Normals","","","T-ALL",""), 
+#         at=seq(0,1,length.out=nrow(img)), side=3, cex=0.7, line=2.5)
+#   #---plot legends
+#   par(mar = c(2.5, 13.2, 1.7, 2),mgp=c(3,0.3,0))
+#   xlab<-c("0.00","0.01","0.05")
+#   image(matrix(1:length(xlab)), col=rev(cols)[1:3], axes=FALSE)
+#   sq<-as.logical(1:length(xlab))
+#   axis(1, at=seq(0, 1, length.out=length(xlab))[sq], 
+#        labels=xlab[sq], las=2,cex.axis=0.6,tcl=-0.2,lwd=0.5)
+#   box(lwd=0.5,col="grey50")
+#   mtext("DPI cutoff",adj=0,line=0.1,cex=0.6) 
+#   dev.off()
+#   cat("-File 'consensus.masters.pdf' generated!\n\n")
+# }

@@ -41,7 +41,7 @@ plotSynergyShadow<-function(rtna){
   colnames(jcmast)<-masters
   jcmast<-getJC(jcmast)
   diag(jcmast)<-1
-  hc<-hclust(as.dist(1-cor(jcmast)), method='ward')
+  hc<-hclust(as.dist(1-cor(jcmast)), method='ward.D')
   dend <- as.dendrogram(hc)
   dend<-reorder(x=dend, wts=rowMeans(jcmast),agglo.FUN=max)
   jcmast<-jcmast[order.dendrogram(dend),order.dendrogram(dend)]

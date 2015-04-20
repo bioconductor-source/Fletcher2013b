@@ -1,3 +1,4 @@
+
 %\VignetteIndexEntry{Main vignette:Fletcher2013b}
 %\VignetteKeywords{Fletcher2013b}
 %\VignettePackage{Fletcher2013b}
@@ -76,7 +77,19 @@ The METABRIC breast cancer gene expression dataset \cite{Curtis2012} was used in
 
 \subsection{Reconstruction of the breast cancer transcription networks}
 
-Due to the large-scale datasets and the parallel processing required to compute the transcription networks, this package provides 4 pre-processed networks named: \Robject{rtni1st} (METABRIC discovery set), \Robject{rtni2nd} (METABRIC validation set), \Robject{rtniNormals} (METABRIC normals) and \Robject{rtniTALL} (T-cell ALL). These R objects will be required to reproduce the analyses along the vignette. Next we describe the main methods used to compute the transcription networks, and in the R package \Rpackage{RTN} we provide a short tutorial demostrating the inference pipeline.
+Due to the large-scale datasets and the parallel processing required to compute the transcription networks, this package provides 4 pre-processed networks named: \Robject{rtni1st} (METABRIC discovery set), \Robject{rtni2nd} (METABRIC validation set), \Robject{rtniNormals} (METABRIC normals) and \Robject{rtniTALL} (T-cell ALL). These R objects will be required to reproduce the analyses along the vignette:
+
+\begin{small}
+<<label=Load DE gene lists, eval=FALSE>>=
+  library(Fletcher2013b)
+  data(rtni1st)
+  data(rtni2nd)
+  data(rtniNormals)
+  data(rtniTALL)
+@ 
+\end{small}
+
+Next we describe the main methods used to compute the transcription networks, and in the R package \Rpackage{RTN} we provide a short tutorial demostrating the inference pipeline.
 
 \subsubsection{Transcription network inference pipeline}
 
@@ -100,11 +113,9 @@ DPI was applied to the RN with tolerance = 0.0 to remove interactions likely to 
 The application of MRA has been described in detail in a previous publication \cite{Carro2010}. MRA computes the overlap between two lists: the TFs and their candidate regulated genes (referred to as regulons) and the gene expression signatures from other sources. In this case, the MRA analytical pipeline estimates the statistical significance of the overlap between all the regulons in each TN using a hypergeometric test. The stability of MRA results was tested by comparing the MRA results between the filtered and unfiltered TN networks, removing master regulators inconsistent with the previous analysis (\textit{i.e.} selected regulons must be significant in both TN networks). Next we retrieve one of the FGFR2 signatures (\textit{i.e.} differentially expressed genes from \textit{Exp1}) and run the MRA analysis on METABRIC discovery set:
 
 \begin{small}
-<<label=Load DE gene lists, eval=TRUE>>=
-  library(Fletcher2013b)
+<<label=Load DE gene lists, eval=FALSE>>=
   sigt <- Fletcher2013pipeline.deg(what="Exp1",idtype="entrez")
   MRA1 <- Fletcher2013pipeline.mra1st(hits=sigt$E2FGF10, verbose=FALSE)
-  MRA1
 @ 
 \end{small}
 
@@ -120,39 +131,6 @@ We provide the following functions to run the MRA analysis on the other 3 TN net
 
 Each of these MRA pipelines constitutes a wrapper function that uses the pre-processed transcriptional networks together with the MRA algorithm implemented in the \Rpackage{RTN} package. Therefore, different signatures can also be interrogated on METABRIC datasets using these functions (for detailed description and default settings, please see the package's documentation).
 
-\section{Consensus breast cancer master regulators (MRs)}
-
-To define a smaller set of functionally important regulons, we applied the MRA functions described in the previous step to all transcriptional networks using all FGFR2 signatures (\textit{i.e.} 2 TN networks vs. 3 FGFR2 signatures). We found that 20 regulons are reproducibly enriched across the two breast cancer cohorts in at least one experiment. This analysis is fully executed next:
-
-\begin{small}
-<<label=Compute FGFR2 master regulators, eval=FALSE,results=hide>>=
-  masters <- Fletcher2013pipeline.masters()
-  Fletcher2013mra.consensus()
-@
-\end{small}
-
-The overall agreement between the two cohorts was very high when a DPI tolerance of 0.05 is allowed, with regulons of five MRs enriched in both cohorts in all three experimental systems (DPI tolerance from 0.01 to 0.05 gives the same consensus). These were SPDEF, ESR1 and its co-factors FOXA1 and GATA3, and PTTG1 (Figure \ref{fig1}).
-
-\section{MRA aggrement among FGFR2 signatures and cohorts}
-
-The agreement among FGFR2 signatures was obtained by ranking regulons according to p-values derived from the MRA analyses, and then computing the Spearman's rank correlation coefficient for each pairwise ranking (Figure \ref{fig2}).
-
-\begin{small}
-<<label=MRA aggrement among FGFR2 signatures for metabric cohort I, eval=FALSE,results=hide>>=
-  Fletcher2013mra.agreement.cohort1()
-@
-\end{small}
-
-Figure \ref{fig2} shows that there is good agreement of the regulon rank when comparing the three different gene expression signatures (\textit{Exp1-3}), both for the total set of regulons as well as the top 50 regulons, suggesting that our three model systems identify similar sets of dysregulated genes following FGFR2 signalling. The agreement among breast cancer cohorts are equally good (Figures \ref{fig3}, \ref{fig4} and \ref{fig5}), and can be reproduced by the following functions:
-
-\begin{small}
-<<label=MRA aggrement among cohorts, eval=FALSE,results=hide>>=
-  Fletcher2013mra.agreement.exp1()
-  Fletcher2013mra.agreement.exp2()
-  Fletcher2013mra.agreement.exp3()
-@
-\end{small}
-
 \section{Transcriptional network of consensus master regulators}
 
 Next, the pipeline function plots a graph representing all regulons identified in the consensus MRA analysis. The network is generated by the R package \Rpackage{RedeR} \cite{Castro2012} and should require some user input in order to tune the layout in the software's interface (Figure \ref{fig6}).
@@ -164,19 +142,6 @@ Next, the pipeline function plots a graph representing all regulons identified i
 \end{small}
 
 \textit{As a suggestion, set 'anchor' to the master regulators at the end of the 'relax' algorithm for a better layout control! right-click the square nodes and then assign 'transform' and 'anchor'!!!}
-
-\section{Clustering analysis}
-
-The non-supervised clustering analysis was performed on the adjacency matrix derived from the RN network. The Jaccard similarity coefficient (JC) was used as metric to compute the \textit{manhattan} distance. For any two regulons, \textit{R1} and \textit{R2}, \textit{JC} is simply obtained by dividing the number of common targets by the number all targets of the regulon pair, $JC = (R1 \cap R2) / (R1 \cup R2)$. The distance matrix was then used as input for the R function \Rfunction{hclust}, setting Ward's minimum variance method for agglomeration.
-
-\begin{small}
-<<label=Plot overlap among regulons, eval=FALSE,results=hide>>=
-  Fletcher2013mra.heatmap1()
-  Fletcher2013mra.heatmap2()
-@
-\end{small}
-
-This code chunk reproduces two heatmaps, one showing all regulons clustered in the relevance network (Figure \ref{fig7}a), and the other focusing on the selected master regulators (Figure \ref{fig7}b).
 
 \section{Enrichment maps}
 
@@ -217,133 +182,12 @@ Regulon shadowing has been described as a potential confounding factor when asse
 
 The pipeline \Rfunction{Fletcher2013pipeline.synergyShadow} is a wrapper for the functions available in \Rpackage{RTN} package, computing at once the synergy and shadow analyses for all master regulators (Figure \ref{fig10}) 
 
-\section{Network validation}
-
-\subsection{Motif analysis of regulons and binding sites}
-
-The position weight matrices (PWM) of known ESR1, FOXA1 and GATA3 motifs were collected from TRANSFAC database \cite{Matys2003} and used as input for the FIMO DNA motif identification tool \cite{Grant2009} to scan motif sites across the human genome (run with default parameters and p-value threshold 1e-4). Only PWMs inferred from MFC-7 cell line were considered in the analysis (the data collected from these webtools are available in \Rpackage{Fletcher2013b}). For each regulon we computed the distances from the transcription start sites to the nearest motif. The observed median distance was then compared to a random distribution derived from a random PWM using the Mann-Whitney test (Figure \ref{fig11}a).
-
-\begin{small}
-<<label=Plot motif analysis, eval=FALSE,results=hide>>=
-  Fletcher2013pipeline.motifs()
-@
-\end{small}
-
-\subsection{ChIP-Seq analysis of regulons and binding sites}
-
-Next we examined the actual TF binding sites of SPDEF, ESR1, GATA3 and FOXA1 in MCF-7 cells (see experimental details in \cite{Fletcher2013}). For each ChIP-Seq experiment and for each transcription start site annotated in the RefSeq collection, the distances from the transcription start sites to the nearest peak were determined (TSS-NP distance). Two complementary permutation analyses were performed to access whether the proximity of a given regulon to the master regulator binding sites is smaller than would be expected by chance. In the first one, a null distribution was obtained by computing the median TSS-NP distance of 1000 random regulons, and in the second approach a null distribution was computed by placing peaks at random locations on the genome (1000 times) and then determining the median TSS-NP distance. The empirical p-value was calculated as the probability of getting the observed median distance as near as, or smaller than, the random distributions. Rejecting \textit{H0} in the former approach indicates that the observed regulon is different from random regulons, while in the later indicates that the distribution of the binding sites related to the observed regulon is different from random binding sites. This statistical analysis is fully executed in the next code chunk using SPDEF ChIP-seq data (Figure \ref{fig11}b):
-
-\begin{small}
-<<label=Plot chipseq analysis, eval=FALSE,results=hide>>=
-  Fletcher2013pipeline.chipseq(what="SPDEF")
-@
-\end{small}
-
-\textit{In order to run the same analysis for all vs. all regulons and datasets, please set the argument 'what' to a different ChIP-seq data (i.e. ESR1, GATA3 or FOXA1).}
-
-\section{Analysis of siRNA data}
-
-As additional validation of the newly identified regulons, we carried out siRNA knock-down experiments using siRNA against SPDEF and PTTG1, and used previously published ESR1 data (included as positive control) to confirm that the responsive gene sets are indeed enriched in the relevant regulons (the siRNA gene expression data is avaible in \Rpackage{Fletcher2013a}). For each of these three putative master regulators we found that its own regulon was significantly enriched. The MRA analysis that reproduces these results is provided in the following code chunk:
-
-\begin{small}
-<<label=MRA analysis using siRNA data (siESR1..siSPDEF..siPTTG1), eval=FALSE,results=hide>>=
-  siESR1  <- Fletcher2013pipeline.siRNA(what="siESR1")
-  siSPDEF <- Fletcher2013pipeline.siRNA(what="siSPDEF")
-  siPTTG1 <- Fletcher2013pipeline.siRNA(what="siPTTG1") 
-@
-\end{small}
-
-\section{Analysis of meta-PCNA signature}
-
-The meta-PCNA signature corresponds to a proliferation-based gene set (n=131 genes) inferred from the top 1\% list of genes correlated with the PCNA gene expression across many tissues \cite{Venet2011}. While PCNA is a well known proliferation marker, the meta-PCNA signature has been originally designed to address a potential confounding variable problem: most cancer signatures are related to bad clinical outcome because they are associated with proliferation. Additionally, meta-PCNA has been shown as a highly effective predictor of breast cancer outcome \cite{Venet2011}. Here, the meta-PCNA was used to assess the hypothesis that the master regulators have been selected only for being related to proliferation; alternatively, a negative result would point to a more specific association with the FGFR2 signalling. Next, we run the same MRA analysis as  described in the first sections of this vignette, but using meta-PCNA genes:
-
-\begin{small}
-<<label=MRA analysis using meta PCNA signature, eval=FALSE,results=hide>>=
-  data(miscellaneous)
-  mPCNAmra <- Fletcher2013pipeline.mra1st(hits=metaPCNA, idtype="entrez", 
-                                          pAdjustMethod="BH", ntop=-1) 
-@
-\end{small}
-
 
 %----------------------------
 %----------------------------
-\clearpage
 %----------------------------
 %----------------------------
 
-
-%%%%%%
-%Fig1%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.6\textwidth]{fig1.pdf}
-\caption{\label{fig1}%
-\textbf{Regulons enriched for FGFR2 signatures (Exp1-3) in breast cancer cohort I and cohort II.}
-There is substantial overlap between the MRs derived for different FGFR2 signatures, and the consensus corresponds to the 5 MRs for DPI threshold from 0.0 to 0.05.}
-\end{center}
-\end{figure}
-
-\clearpage
-
-%%%%%%
-%Exp2%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{fig2.pdf}
-\caption{\label{fig2}%
-\textbf{MRA agreement among different FGFR perturbation experiments.} 
-The scatter plots show the agreement in the ranking of all regulons by the enrichment p-value, between the different experimental perturbations of FGFR2 signalling: Exp1=E2+FGF10, Exp2=E2+AP20187 and Exp3=Tet+E2+FGF10. Each dot represents one regulon (i.e. one TF and all its targets) in the relevance network derived from cohort I. The correlation coefficient R is given for each pairwise ranking. The corresponding Venn diagrams show the level of agreement on the ranking for the top 50 enriched regulons, expressed by the Jaccard Coefficient (JC).
-}
-\end{center}
-\end{figure}
-
-\clearpage
-
-%%%%%%
-%Exp3%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{fig3.pdf}
-\caption{\label{fig3}%
-\textbf{MRA agreement among regulons derived from different relevance networks.} 
-Regulons are ranked by the enrichment p-value estimated for E2.FGF10 signature (Exp1) and the graphs show the comparisons of regulon rank for cohort I, cohort II, normal breast tissue and T-ALL for all regulons. The correlation coefficient R is given for each comparison. The Venn diagrams depict the same comparison, but showing only the overlap obtained for the top 50 ranks, quantified by the Jaccard Coefficient (JC).
-}
-\end{center}
-\end{figure}
-
-\clearpage
-
-%%%%%%
-%Exp4%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{fig4.pdf}
-\caption{\label{fig4}%
-\textbf{MRA agreement among regulons derived from different relevance networks.} 
-Regulons are ranked by the enrichment p-value estimated for E2.AP20187 signature (iF2 construct perturbation experiments) (Exp2) and shown as in Figure 3.}
-\end{center}
-\end{figure}
-
-\clearpage
-
-%%%%%%
-%Fig5%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{fig5.pdf}
-\caption{\label{fig5}%
-\textbf{MRA agreement among regulons derived from different relevance networks.}
-Regulons are ranked by the enrichment p-value estimated for PT.E2.FGF10 signature (FGFR2b perturbation experiments) (Exp3) and shown as in Supplementary Figure 4.}
-\end{center}
-\end{figure}
-
-\clearpage
 
 %%%%%%
 %Fig6%
@@ -354,20 +198,6 @@ Regulons are ranked by the enrichment p-value estimated for PT.E2.FGF10 signatur
 \caption{\label{fig6}%
 \textbf{Breast cancer transcriptional network (TN) enriched for the FGFR2 responsive genes.}
 The network shows the 5 MRs, each one comprising one TF (square nodes) and all inferred targets (round nodes) applying a DPI threshold of 0.01.}
-\end{center}
-\end{figure}
-
-\clearpage
-
-%%%%%%
-%Fig7%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.9\textwidth]{fig7.pdf}
-\caption{\label{fig7}%
-\textbf{Overlap between regulons in the relevance network.}
-(a) The heatmap shows the hierarchical clustering on the Jaccard similarity coefficient (in shades of blue) computed among all regulons in the relevance network derived from cohort I. Sidebars show the enrichment p-values (shades of orange) from the MRA analysis for FGFR2-associated gene expression signatures (Exp1-3) at the top of the graph and the MRA analysis for E2-associated gene expression signatures (E2 Ctrl1-3) derived for each experiment on the left. (b) Hierarchical clustering on the Jaccard similarity coefficient focused on the overlap between the 5MRs of the FGFR2 response.}
 \end{center}
 \end{figure}
 
@@ -412,22 +242,6 @@ Regulons are ranked by their response to FGFR2 signalling (phenotype) using the 
 The overlap, synergy and shadowing are depicted (see Fletcher et al. \cite{Fletcher2013} for more details). Shadowing can only be computed for those regulons whose overlap is significant.}
 \end{center}
 \end{figure}
-
-\clearpage
-
-%%%%%%
-%Fig11%
-%%%%%%
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.8\textwidth]{fig11.pdf}
-\caption{\label{fig11}%
-\textbf{Validation of regulons.}
-(a) Enrichment of known binding motifs for ESR1, FOXA1 and GATA3 in each of their inferred regulons. The occurrence of motif sites is shown as the distance between the TSS of the genes in each regulon and the nearest motif encountered (red line). This was compared to the occurrence of random sites of the same length in the same regulons derived for a random motif (black line). Motifs are taken from Transfac. (b) Enrichment of binding sites of the ESR1, FOXA1, GATA3 and SPDEF regulons in SPDEF ChIP-seq data obtained in MCF-7 cells. A background distribution is shown as a reference line (grey line) and represents the distance between the TSS and a random peak placed in the same chromosome.}
-\end{center}
-\end{figure}
-
-\clearpage
 
 %----------------------------
 %----------------------------

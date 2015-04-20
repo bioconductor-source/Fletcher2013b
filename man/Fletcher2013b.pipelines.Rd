@@ -3,13 +3,9 @@
 \alias{Fletcher2013pipeline.mra2nd}
 \alias{Fletcher2013pipeline.mraNormals}
 \alias{Fletcher2013pipeline.mraTALL}
-\alias{Fletcher2013pipeline.masters}
-\alias{Fletcher2013pipeline.siRNA}
 \alias{Fletcher2013pipeline.synergyShadow}
 \alias{Fletcher2013pipeline.consensusnet}
 \alias{Fletcher2013pipeline.enrichmap}
-\alias{Fletcher2013pipeline.chipseq}
-\alias{Fletcher2013pipeline.motifs}
 \alias{Fletcher2013b}
 
 \title{
@@ -29,13 +25,9 @@ Pipeline functions to reproduce results for Fletcher et al. 2013.
     pAdjustMethod="holm",tnet="dpi", eps=0, pValueCutoff=1e-4, verbose=TRUE, ...)
  Fletcher2013pipeline.mraTALL(hits, minRegulonSize=20, idtype="probeid", 
     pAdjustMethod="holm", tnet="dpi", eps=0, pValueCutoff=0.01, verbose=TRUE, ...)
- Fletcher2013pipeline.siRNA(what="siESR1")
- Fletcher2013pipeline.chipseq(what="SPDEF")
- Fletcher2013pipeline.masters()
  Fletcher2013pipeline.synergyShadow()
  Fletcher2013pipeline.consensusnet()
  Fletcher2013pipeline.enrichmap()
- Fletcher2013pipeline.motifs()
 }
 
 \arguments{
@@ -64,9 +56,6 @@ a single numeric value specifying the cutoff for p-values considered significant
 }
 \item{verbose}{
 a single logical value specifying to display detailed messages (when verbose=TRUE) or not (when verbose=FALSE). 
-}
-\item{what}{
-a single character value specifying which data should be used in the pipeline. Options for \code{Fletcher2013pipeline.siRNA}: 'siESR1','siSPDEF', and 'siPTTG1'. Options for \code{Fletcher2013pipeline.chipseq}: 'ESR1','SPDEF', 'FOXA1', and 'GATA3'.
 }
 \item{...}{
 other arguments passed to the \code{RTN} package.

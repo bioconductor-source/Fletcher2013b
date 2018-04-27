@@ -20,7 +20,7 @@ Fletcher2013pipeline.synergyShadow<-function(){
   pheno<-pheno[!is.na(names(pheno))]
   rtni1st@results$tn.dpi<-rtni1st@results$tn.dpi[,masters]
   rtni1st@results$tn.ref<-rtni1st@results$tn.ref[,masters]
-  rtni1st@transcriptionFactors=masters
+  rtni1st@regulatoryElements=masters
   rtna <- tni2tna.preprocess(rtni1st, phenotype=pheno, verbose=FALSE)
   
   rtna <- tna.overlap(rtna, pValueCutoff=0.001, minRegulonSize=20, verbose=TRUE)
@@ -157,7 +157,7 @@ Fletcher2013gsea.regulons<-function(what="Exp1", timepoint=6, verbose=TRUE){
   pheno<-pheno[!is.na(names(pheno))]
   rtni1st@results$tn.dpi<-rtni1st@results$tn.dpi[,consensusmasters]
   rtni1st@results$tn.ref<-rtni1st@results$tn.ref[,consensusmasters]
-  rtni1st@transcriptionFactors=consensusmasters
+  rtni1st@regulatoryElements=consensusmasters
   rtna <- tni2tna.preprocess(rtni1st, phenotype=pheno, verbose=FALSE)
   
   rtna <- tna.gsea1(rtna, nPermutations=1000, stepFilter=FALSE, verbose=verbose)

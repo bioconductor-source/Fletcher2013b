@@ -40,7 +40,7 @@ Fletcher2013pipeline.enrichmap<-function(){
   bin[bin>0]=1
   degree<-colSums(bin)
   ##add symbols
-  tfs<-tni.get(rtni1st, what = "tfs")
+  tfs<-tni.get(rtni1st, what = "regulatoryElements")
   idx<-tfs%in%colnames(adjmt)
   masterids<-data.frame(probeid=tfs[idx],symbol=names(tfs[idx]))
   rownames(masterids)<-tfs[idx]

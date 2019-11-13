@@ -3,10 +3,8 @@ export(
 "Fletcher2013pipeline.mra2nd",
 "Fletcher2013pipeline.mraNormals",
 "Fletcher2013pipeline.mraTALL",
-"Fletcher2013pipeline.synergyShadow",
 "Fletcher2013pipeline.consensusnet",
-"Fletcher2013pipeline.enrichmap",
-"Fletcher2013gsea.regulons"
+"Fletcher2013pipeline.enrichmap"
 )
 import(Fletcher2013a)
 import(RedeR)

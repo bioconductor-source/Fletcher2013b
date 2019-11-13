@@ -3,7 +3,6 @@
 \alias{Fletcher2013pipeline.mra2nd}
 \alias{Fletcher2013pipeline.mraNormals}
 \alias{Fletcher2013pipeline.mraTALL}
-\alias{Fletcher2013pipeline.synergyShadow}
 \alias{Fletcher2013pipeline.consensusnet}
 \alias{Fletcher2013pipeline.enrichmap}
 \alias{Fletcher2013b}
@@ -25,7 +24,6 @@ Pipeline functions to reproduce results for Fletcher et al. 2013.
     pAdjustMethod="holm",tnet="dpi", eps=0, pValueCutoff=1e-4, verbose=TRUE, ...)
  Fletcher2013pipeline.mraTALL(hits, minRegulonSize=20, idtype="probeid", 
     pAdjustMethod="holm", tnet="dpi", eps=0, pValueCutoff=0.01, verbose=TRUE, ...)
- Fletcher2013pipeline.synergyShadow()
  Fletcher2013pipeline.consensusnet()
  Fletcher2013pipeline.enrichmap()
 }
